@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Emotional Jars</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #1e1f3f, #2d3a56);
+      color: #fff;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #f7f0ff;
+      margin-bottom: 40px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .jars {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .jar-container {
+      position: relative;
+      width: 200px;
+      height: 300px;
+    }
+
+    .jar-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .jar-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 20px #9ddfff);
+    }
+
+    .moon, .stars, .tag {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .moon {
+      top: 60px;
+      font-size: 28px;
+      color: #fffacd;
+      text-shadow: 0 0 8px #ffffe0;
+    }
+
+    .stars {
+      top: 100px;
+      font-size: 12px;
+      color: #ffffffaa;
+    }
+
+    .tag {
+      bottom: 40px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      padding: 10px;
+      width: 140px;
+      border-radius: 12px;
+      border: 2px solid #4b0082;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .popup, .overlay {
+      display: none;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 998;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ffffff;
+      color: #333;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      z-index: 999;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .popup h2 {
+      color: #4b0082;
+      margin-bottom: 15px;
+    }
+
+    .popup p {
+      font-size: 14px;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+
+    .polaroids {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .polaroid {
+      width: 80px;
+      height: 100px;
+      background: #eee;
+      border: 2px solid #ccc;
+      text-align: center;
+      padding-top: 75px;
+      font-size: 11px;
+      color: #444;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      padding: 6px 14px;
+      border: none;
+      background: #4b0082;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h1>💖 Emotional Jars</h1>
+
+<div class="jars">
+  <div class="jar-container">
+    <div class="jar-wrapper">
+      <img src="jar.png" class="jar-image" alt="Jar">
+      <div class="moon">🌙</div>
+      <div class="stars">✨ ✨</div>
+      <div class="tag" onclick="showPopup(0)">Open when you can't explain what you’re feeling</div>
+    </div>
+  </div>
+  <div class="jar-container">
+    <div class="jar-wrapper">
+      <img src="jar.png" class="jar-image" alt="Jar">
+      <div class="moon">🌙</div>
+      <div class="stars">✨ ✨</div>
+      <div class="tag" onclick="showPopup(1)">Open when you want to feel seen, but not spoken to</div>
+    </div>
+  </div>
+  <div class="jar-container">
+    <div class="jar-wrapper">
+      <img src="jar.png" class="jar-image" alt="Jar">
+      <div class="moon">🌙</div>
+      <div class="stars">✨ ✨</div>
+      <div class="tag" onclick="showPopup(2)">Open when silence feels safer than smiles</div>
+    </div>
+  </div>
+</div>
+
+<!-- Popup -->
+<div class="overlay" id="overlay" onclick="hidePopup()"></div>
+<div class="popup" id="popup">
+  <h2 id="popupTitle"></h2>
+  <p id="popupText"></p>
+  <div class="polaroids">
+    <div class="polaroid">📷 Polaroid 1</div>
+    <div class="polaroid">📷 Polaroid 2</div>
+  </div>
+  <button class="close-btn" onclick="hidePopup()">Close</button>
+</div>
+
+<script>
+  const messages = [
+    {
+      title: "You don't have to,",
+      text: "Some days the world speaks too loud\nand your heart whispers too soft.\nJust know—I hear that whisper, even in silence."
+    },
+    {
+      title: "I see you.",
+      text: "Not the smile, not the replies.\nJust you. The quiet version.\nAnd that version… is more than enough."
+    },
+    {
+      title: "I'm with you.",
+      text: "If you're sitting in silence right now,\nI'm right beside you.\nNo questions. No rush.\nJust stillness and presence."
+    }
+  ];
+
+  function showPopup(index) {
+    document.getElementById("popupTitle").innerText = messages[index].title;
+    document.getElementById("popupText").innerText = messages[index].text;
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+  }
+
+  function hidePopup() {
+    document.getElementById("popup").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+  }
+</script>
+
+</body>
+</html>
